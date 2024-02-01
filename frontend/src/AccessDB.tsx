@@ -8,6 +8,7 @@ import {Ace} from "ace-builds";
 import 'brace/mode/sql';
 import 'brace/theme/sqlserver';
 import 'brace/ext/language_tools'
+import useIpAddress from "./useIpAddress.ts";
 
 const AccessDb: FC = () => {
     const onLoad = (editor: Ace.Editor) => {
@@ -23,9 +24,11 @@ const AccessDb: FC = () => {
     const [result, setResult] = useState({})
     const [loading, setLoading] = useState(false);
 
+    const ipAddress = useIpAddress();
+
     const makeRequestDB = () => {
         setLoading(true)
-        axios.post("http://95.31.11.209/query/", {
+        axios.post(`http://${ipAddress === null || ipAddress === "95.31.11.209" ? "192.168.1.64" : "95.31.11.209"}:8018/query/`, {
             sql: value,
         })
             .then(response => {
